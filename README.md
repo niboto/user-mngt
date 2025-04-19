@@ -1,4 +1,4 @@
-# code-rest-sql
+# user-mngt
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
