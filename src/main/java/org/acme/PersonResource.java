@@ -8,6 +8,8 @@ import jakarta.ws.rs.core.StreamingOutput;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -114,17 +116,20 @@ public Response updateByName(@PathParam("name") String name, Person updatedPerso
 
 @GET
 @Path("/export/csv")
-@Produces("text/csv")
-public StreamingOutput exportPersonsToCSV() {
+public Response exportPersonsToCSV() {
     List<Person> persons = personRepository.listAll();
 
-    return out -> {
+    // Générer l'horodatage
+    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+    String filename = "persons_" + timestamp + ".csv";
+
+    StreamingOutput stream = out -> {
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 
         // En-tête CSV
         writer.println("id,name,birthdate");
 
-        // Chaque personne dans une ligne
+        // Corps du CSV
         for (Person person : persons) {
             writer.printf("%d,%s,%s%n",
                 person.id,
@@ -134,8 +139,11 @@ public StreamingOutput exportPersonsToCSV() {
         }
         writer.flush();
     };
-}
 
+    return Response.ok(stream, "text/csv")
+            .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+            .build();
+}
 
 
 }
