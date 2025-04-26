@@ -4,7 +4,10 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
+import jakarta.ws.rs.core.StreamingOutput;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -105,6 +108,32 @@ public Response updateByName(@PathParam("name") String name, Person updatedPerso
 
     personRepository.persist(person); // Sauvegarde les modifications
     return Response.ok(person).build(); // Retourne la personne mise à jour
+}
+
+
+
+@GET
+@Path("/export/csv")
+@Produces("text/csv")
+public StreamingOutput exportPersonsToCSV() {
+    List<Person> persons = personRepository.listAll();
+
+    return out -> {
+        PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+
+        // En-tête CSV
+        writer.println("id,name,birthdate");
+
+        // Chaque personne dans une ligne
+        for (Person person : persons) {
+            writer.printf("%d,%s,%s%n",
+                person.id,
+                person.name != null ? person.name : "",
+                person.birthdate != null ? person.birthdate.toString() : ""
+            );
+        }
+        writer.flush();
+    };
 }
 
 
