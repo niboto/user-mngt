@@ -1,8 +1,11 @@
 package org.acme;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
@@ -30,8 +33,12 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "person", uniqueConstraints = @jakarta.persistence.UniqueConstraint(columnNames = "name"))
-public class Person extends PanacheEntity {
+public class Person extends PanacheEntityBase {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // compatible MariaDB
+    public Long id;
+    
     @Column(nullable = false)
     public String name;
 
