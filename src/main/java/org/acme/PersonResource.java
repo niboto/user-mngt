@@ -83,6 +83,14 @@ public Response updatePerson(@PathParam("id") Long id, Person updatedPerson) {
         return Response.status(Response.Status.NOT_FOUND).entity("Person not found with ID: " + id).build();
     }
 
+    // si il a un doublon, alors sortir en erreur
+    boolean exists = personRepository.find("name", updatedPerson.name).firstResult() != null;
+    if (exists) {
+        return Response.status(Response.Status.CONFLICT)
+                       .entity("Person with this name already exists.")
+                       .build();
+    }
+
     // Met à jour les champs de la personne
     person.name = updatedPerson.name != null ? updatedPerson.name : person.name; // Si le nom est fourni, on le met à jour
     person.birthdate = updatedPerson.birthdate != null ? updatedPerson.birthdate : person.birthdate; // Si la date est fournie, on la met à jour
@@ -102,6 +110,14 @@ public Response updateByName(@PathParam("name") String name, Person updatedPerso
     Person person = personRepository.find("name", name).firstResult(); // Trouve la première personne avec ce nom
     if (person == null) {
         return Response.status(Response.Status.NOT_FOUND).entity("Person not found with name: " + name).build();
+    }
+
+    // si il a un doublon, alors sortir en erreur
+    boolean exists = personRepository.find("name", updatedPerson.name).firstResult() != null;
+    if (exists) {
+        return Response.status(Response.Status.CONFLICT)
+                       .entity("Person with this name already exists.")
+                       .build();
     }
 
     // Met à jour les champs de la personne
