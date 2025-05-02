@@ -6,8 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 
@@ -42,5 +45,33 @@ public class Person extends PanacheEntityBase {
     @Column(nullable = false)
     public String name;
 
+    @Column(nullable = false)
     public LocalDate birthdate;
+
+    @Column(nullable = false)
+    public String profilname;
+
+    @Column(nullable = false, updatable = false)
+    public LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    public LocalDateTime updatedAt;
+
+
+   // Méthode appelée automatiquement avant insertion
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+
+       @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    
 }
