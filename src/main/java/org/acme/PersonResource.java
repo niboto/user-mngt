@@ -94,6 +94,9 @@ public Response updatePerson(@PathParam("id") Long id, Person updatedPerson) {
     // Met à jour les champs de la personne
     person.name = updatedPerson.name != null ? updatedPerson.name : person.name; // Si le nom est fourni, on le met à jour
     person.birthdate = updatedPerson.birthdate != null ? updatedPerson.birthdate : person.birthdate; // Si la date est fournie, on la met à jour
+    person.profilname = updatedPerson.profilname != null ? updatedPerson.profilname : person.profilname; // Si le profil est fourni, on le met à jour
+
+
 
     // Sauvegarde les modifications
     personRepository.persist(person);
