@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 
 
@@ -52,9 +54,11 @@ public class Person extends PanacheEntityBase {
     public String profilname;
 
     @Column(nullable = false, updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") // Format ISO 8601 pour la création
     public LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") // Format ISO 8601 pour la création
     public LocalDateTime updatedAt;
 
 

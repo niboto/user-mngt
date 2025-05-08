@@ -154,15 +154,15 @@ public Response exportPersonsToCSV() {
         PrintWriter writer = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 
         // En-tête CSV
-        writer.println("id,name,birthdate,profilname, createdAt,updatedAt");
+        writer.println("id,name,birthdate,profilname,createdAt,updatedAt");
 
         // Corps du CSV
         for (Person person : persons) {
-            writer.printf("%d,%s,%s%n",
+            writer.printf("%d,%s,%s,%s,%s,%s%n",
                 person.id,
                 person.name != null ? person.name : "",
                 person.birthdate != null ? person.birthdate.toString() : "",
-                person.profilname != null ? person.profilname : "",
+                person.profilname != null ? person.profilname.toString() : "",
                 person.createdAt != null ? person.createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : "",
                 person.updatedAt != null ? person.updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : ""
             );
