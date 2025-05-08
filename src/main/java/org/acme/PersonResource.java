@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import org.jboss.logging.Logger;
 
 
 @Path("/persons")
@@ -20,6 +21,9 @@ public class PersonResource {
 
     // Déclaration du champ personRepository
        private final PersonRepository personRepository;
+
+    // Logger pour la classe
+    private static final Logger LOG = Logger.getLogger(PersonResource.class);
     
   // Constructeur pour l'injection
   public PersonResource(PersonRepository personRepository) {
@@ -28,6 +32,10 @@ public class PersonResource {
 
     @GET
     public List<Person> getAll() {
+        // Récupérer tous les enregistrements de la table Person
+        // et les retourner sous forme de liste
+        // en utilisant la méthode listAll() de Panache
+        LOG.info("GET Person List ");
         return personRepository.listAll();
     }
 
